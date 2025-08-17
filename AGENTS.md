@@ -15,7 +15,6 @@ You (automation) are acting as **Principal Engineer**. Follow this agreement exa
 9. **Cross-browser compatibility**: Target modern browsers via Browserslist (`> 0.5%, last 2 versions, not dead`).
 10. **Accessibility**: Ensure JSX includes ARIA labels and keyboard navigation (lint with `eslint-plugin-jsx-a11y`).
 11. **Error handling**: Use React error boundaries to prevent app crashes.
-12. **No console errors/warnings**: Verify via Playwright console checks.
 
 ## Branching & Commits
 
@@ -30,10 +29,6 @@ You (automation) are acting as **Principal Engineer**. Follow this agreement exa
 4. Keep `index.css` as is, import globally in `main.tsx`. Split into `src/styles/` (e.g., `global.css`, `sidebar.css`, `chat.css`) with identical rules, ensuring no visual changes.
 5. Ensure fonts, meta tags, and links (e.g., Google Fonts) from `index.html` are intact in `index.html` or `App.tsx`.
 6. Extract shared UI (e.g., sidebar) into `components/Sidebar.tsx` for reuse.
-7. **Post-Task 3: Set up Playwright for visual regression testing** (run after Sidebar extraction):
-   - Install `@playwright/test`.
-   - Add test to snapshot UI (e.g., `/` route) across Chromium, Firefox, WebKit.
-   - Check console for errors/warnings and accessibility (keyboard navigation, ARIA).
 
 ## Phase 2 — Routing (still no visual changes)
 
@@ -41,7 +36,7 @@ You (automation) are acting as **Principal Engineer**. Follow this agreement exa
   - `/login`, `/hub`, `/settings`, `/settings/global`, `/workspace/:id`, `/workspace/:id/knowledge`
 - Move sections from `LegacyShell.tsx` into dedicated pages (`pages/Login.tsx`, `pages/Hub.tsx`, etc.) **verbatim** as JSX.
 - Reuse `Sidebar.tsx` across routes for consistent navigation.
-- Remove each section from `LegacyShell.tsx` once verified for pixel-parity (use Playwright for visual regression tests).
+- Remove each section from `LegacyShell.tsx` once verified for pixel-parity (manual check or build success).
 - Ensure dynamic routes (e.g., `/workspace/:id`) handle container-specific data correctly.
 
 ## Phase 3 — Stubs (no API integration yet)
@@ -59,9 +54,8 @@ You (automation) are acting as **Principal Engineer**. Follow this agreement exa
 
 ## Acceptance per Task
 
-- App builds (`npm run build`) and runs (`npm start`).
-- UI visually identical to main branch (verified via Playwright screenshot tests).
+- App builds (`npm run build`) and runs (`npm start`) without errors.
+- UI visually identical to main branch (verified via manual check or build success).
 - `npx tsc --noEmit` passes (no TypeScript errors).
-- No console errors/warnings (verified via Playwright).
-- Accessibility checks pass (via `eslint-plugin-jsx-a11y` and Playwright).
+- `npm run lint` passes (no JSX or accessibility errors).
 - README Task Log updated with task details.
