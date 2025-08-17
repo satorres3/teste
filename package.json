@@ -8,7 +8,8 @@
     "build": "vite build",
     "preview": "vite preview",
     "test:visual": "playwright test",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src --ext .ts,.tsx"
   },
   "dependencies": {
     "@google/genai": "^1.14.0",
@@ -18,9 +19,18 @@
   "devDependencies": {
     "@playwright/test": "^1.47.0",
     "@types/node": "^22.14.0",
+    "@typescript-eslint/eslint-plugin": "^7.3.1",
+    "@typescript-eslint/parser": "^7.3.1",
     "@vitejs/plugin-react": "^5.0.0",
+    "eslint": "^8.57.0",
+    "eslint-plugin-jsx-a11y": "^6.10.2",
+    "eslint-plugin-react": "^7.37.5",
     "typescript": "~5.8.2",
     "vite": "^6.2.0"
   },
-  "browserslist": ["> 0.5%", "last 2 versions", "not dead"]
+  "browserslist": [
+    "> 0.5%",
+    "last 2 versions",
+    "not dead"
+  ]
 }
