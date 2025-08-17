@@ -1,10 +1,10 @@
 # Architecture
 
-The Chatbot Hub is a modular, cloud-native application for AI-powered workspaces, built with React (frontend), FastAPI (backend), and Azure services. It supports multiple LLMs, RAG for knowledge bases, and integrations with Microsoft Graph.
+The Chatbot Hub is a modular, cloud-native application for AI-powered workspaces, built with React (frontend), FastAPI (backend, future), and Azure services. It supports multiple LLMs, RAG for knowledge bases, and integrations with Microsoft Graph.
 
 ## System Overview
 
-The system consists of a React frontend (Vite for dev/build), a FastAPI backend, and Azure services for storage, database, and search. The frontend communicates with the backend via REST API (Bearer token) and SSE for real-time chat updates. The backend handles AI logic (LangChain), knowledge ingestion, and external integrations.
+The system consists of a React frontend (Vite for dev/build), a FastAPI backend (to be added), and Azure services for storage, database, and search. The frontend communicates with the backend via REST API (Bearer token) and SSE for real-time chat updates. The backend handles AI logic (LangChain), knowledge ingestion, and external integrations.
 
 ## Architecture Diagram
 
