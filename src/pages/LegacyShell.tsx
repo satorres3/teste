@@ -2339,7 +2339,7 @@ export default function LegacyShell() {
                 <div className="form-group">
                   <label htmlFor="edit-custom-icon-upload" className="form-label">Upload Custom Icon</label>
                   <div className="custom-icon-uploader">
-                    <img id="edit-custom-icon-preview" src="" alt="Custom icon preview" className="custom-icon-preview hidden" />
+                      <img id="edit-custom-icon-preview" src={null} alt="Custom icon preview" className="custom-icon-preview hidden" />
                     <button type="button" id="edit-custom-icon-btn" className="modal-btn modal-btn-secondary">Choose Image...</button>
                     <input type="file" id="edit-custom-icon-upload" className="hidden" accept="image/png, image/jpeg, image/webp, image/svg+xml" />
                   </div>
@@ -2352,7 +2352,7 @@ export default function LegacyShell() {
                   <label className="form-label">Card Background Image</label>
                   <div className="card-image-selector">
                     <div id="card-image-options-list" className="icon-selector-grid" />
-                    <img id="edit-card-image-preview" src="" alt="Card image preview" className="card-image-preview hidden" />
+                      <img id="edit-card-image-preview" src={null} alt="Card image preview" className="card-image-preview hidden" />
                     <button type="button" id="edit-card-image-btn" className="modal-btn modal-btn-secondary">Upload Custom Image...</button>
                     <input type="file" id="edit-card-image-upload" className="hidden" accept="image/png, image/jpeg, image/webp" />
                   </div>
@@ -2706,7 +2706,7 @@ export default function LegacyShell() {
                 <div className="form-group">
                   <label htmlFor="add-custom-icon-upload" className="form-label">Or Upload Custom Icon</label>
                   <div className="custom-icon-uploader">
-                    <img id="add-custom-icon-preview" src="" alt="Custom icon preview" className="custom-icon-preview hidden" />
+                      <img id="add-custom-icon-preview" src={null} alt="Custom icon preview" className="custom-icon-preview hidden" />
                     <button type="button" id="add-custom-icon-btn" className="modal-btn modal-btn-secondary">Choose Image...</button>
                     <input type="file" id="add-custom-icon-upload" className="hidden" accept="image/png, image/jpeg, image/webp, image/svg+xml" />
                   </div>
