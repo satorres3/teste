@@ -160,3 +160,7 @@ Task: Fix portal navigation buttons
 Commit: cde6ac4, d8ec486
 Files: src/App.tsx, src/pages/Hub.tsx, src/pages/SettingsHub.tsx, src/pages/GlobalSettings.tsx, src/pages/Workspace.tsx, src/pages/Knowledge.tsx, src/pages/ContainerManagement.tsx
 Notes: Wired settings, back, and logout buttons to React Router routes and added container management stub.
+Task: Activate stubbed UI buttons
+Commit: 3919afa
+Files: src/pages/Hub.tsx, src/pages/ContainerManagement.tsx, src/pages/GlobalSettings.tsx
+Notes: Enabled profile dropdown, add container button, settings tabs and form controls.
