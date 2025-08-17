@@ -119,3 +119,7 @@ Task: Configure ESLint
 Commit: <hash>
 Files: .eslintrc.json, package.json, package-lock.json, README.md
 Notes: Added ESLint with React, a11y, and TypeScript rules and lint script.
+Task: Add error boundary component
+Commit: <hash>
+Files: src/components/ErrorBoundary.tsx, src/App.tsx, README.md
+Notes: Added class-based ErrorBoundary and wrapped LegacyShell with it.
