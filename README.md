@@ -102,3 +102,7 @@ Task: Scaffold React app and migrate legacy shell
 Commit: 1fd72ad
 Files: index.html, package.json, vite.config.ts, src/App.tsx, src/main.tsx, src/pages/LegacyShell.tsx
 Notes: Added React dependencies and migrated existing UI/logic into React components.
+Task: Split index.css into modular styles
+Commit: <hash>
+Files: index.css, src/main.tsx, src/styles/global.css, src/styles/sidebar.css, src/styles/chat.css, src/styles/hub.css, src/styles/settings.css, src/styles/modal.css
+Notes: Extracted page-specific rules to dedicated CSS files and updated imports.
