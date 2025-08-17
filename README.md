@@ -147,3 +147,15 @@ Task: Fix empty src attributes in LegacyShell.tsx
 Commit: 6904f2b
 Files: src/pages/LegacyShell.tsx, .eslintrc.json, README.md
 Notes: Replaced empty image src values with null and tightened ESLint rules.
+Task: Add React Router with login as entry route
+Commit: <hash>
+Files: package.json, src/App.tsx, src/pages/LegacyShell.tsx, src/pages/Login.tsx, src/pages/Hub.tsx, src/pages/SettingsHub.tsx, src/pages/GlobalSettings.tsx, src/pages/Workspace.tsx, src/pages/Knowledge.tsx
+Notes: Added react-router-dom; set /login as entry; sidebar excluded from login; no visual changes.
+Task: Migrate login and hub with functional sidebar
+Commit: <hash>
+Files: src/pages/LegacyShell.tsx, src/pages/Login.tsx, src/pages/Hub.tsx, src/components/Sidebar.tsx, src/styles/login.css, src/styles/hub.css
+Notes: Moved login and hub markup; ensured sidebar buttons work; sidebar excluded from login; no visual changes.
+Task: Add settings and workspace routes with dynamic sidebar
+Commit: <hash>
+Files: src/pages/SettingsHub.tsx, src/pages/GlobalSettings.tsx, src/pages/Workspace.tsx, src/pages/Knowledge.tsx, src/components/Sidebar.tsx, src/styles/settings.css, src/styles/workspace.css, src/styles/sidebar.css, src/styles/global.css, src/main.tsx
+Notes: Moved settings and workspace markup; added dynamic sidebar; no visual changes.
