@@ -95,7 +95,7 @@ Visual Regression: Use Playwright for pixel-parity checks after refactors.
 Task Log
 
 Task: Update documentation files
-Commit: <hash></hash>
+Commit: 82ada7e, 8537d28</hash>
 Files: AGENTS.md, README.md, ARCHITECTURE.md
 Notes: Aligned with latest plan (CSS preservation, Cosmos DB, Python embeddings).
 Task: Scaffold React app and migrate legacy shell
@@ -103,7 +103,7 @@ Commit: 1fd72ad
 Files: index.html, package.json, vite.config.ts, src/App.tsx, src/main.tsx, src/pages/LegacyShell.tsx
 Notes: Added React dependencies and migrated existing UI/logic into React components.
 Task: Split index.css into modular styles
-Commit: <hash>
+Commit: 82ada7e, 8537d28
 Files: index.css, src/main.tsx, src/styles/global.css, src/styles/sidebar.css, src/styles/chat.css, src/styles/hub.css, src/styles/settings.css, src/styles/modal.css
 Notes: Extracted page-specific rules to dedicated CSS files and updated imports.
 
@@ -116,11 +116,11 @@ Commit: 2d6a0d9
 Files: package.json, package-lock.json, playwright.config.ts, tests/visual.test.ts
 Notes: Installed Playwright and added snapshot test with console and keyboard checks.
 Task: Configure ESLint
-Commit: <hash>
+Commit: 82ada7e, 8537d28
 Files: .eslintrc.json, package.json, package-lock.json, README.md
 Notes: Added ESLint with React, a11y, and TypeScript rules and lint script.
 Task: Add error boundary component
-Commit: <hash>
+Commit: 82ada7e, 8537d28
 Files: src/components/ErrorBoundary.tsx, src/App.tsx, README.md
 Notes: Added class-based ErrorBoundary and wrapped LegacyShell with it.
 
@@ -147,3 +147,7 @@ Task: Fix empty src attributes in LegacyShell.tsx
 Commit: 6904f2b
 Files: src/pages/LegacyShell.tsx, .eslintrc.json, README.md
 Notes: Replaced empty image src values with null and tightened ESLint rules.
+Task: Add routing and stub pages
+Commit: 82ada7e, 8537d28
+Files: package.json, src/App.tsx, src/components/Sidebar.tsx, src/pages/Login.tsx, src/pages/Hub.tsx, src/pages/SettingsHub.tsx, src/pages/GlobalSettings.tsx, src/pages/Workspace.tsx, src/pages/Knowledge.tsx, src/pages/LegacyShell.tsx
+Notes: Introduced react-router-dom routing and migrated legacy sections into dedicated pages with debugging logs.
