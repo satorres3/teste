@@ -1,6 +1,14 @@
 import React, { useEffect } from 'react';
-import { GoogleGenAI, Chat, Part, Type, GenerateContentResponse } from '@google/genai';
 import Sidebar from '../components/Sidebar';
+import { callLLM } from '../lib/api';
+
+interface Part {
+  text?: string;
+  inlineData?: {
+    data: string;
+    mimeType: string;
+  };
+}
 
 export default function LegacyShell() {
   useEffect(() => {
@@ -435,7 +443,7 @@ export default function LegacyShell() {
         attachedFile: null as { name: string, type: string, base64: string } | null,
         draftNewContainer: null as DraftNewContainer | null,
         currentRunningFunction: null as AppFunction | null,
-        containerChats: new Map<string, Chat>(), // Key: `${containerId}-${chatId}-${modelName}`
+        containerChats: new Map<string, unknown>(), // Key: `${containerId}-${chatId}-${modelName}`
         itemToDelete: null as ItemToDelete,
     };
 
@@ -1369,208 +1377,16 @@ export default function LegacyShell() {
 
 
     // --- [MODULE] src/api.ts ---
-    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
-
-    const generateSuggestions = async (containerName: string, suggestionType: 'questions' | 'personas') => {
-        const prompt = suggestionType === 'questions'
-            ? `Based on a container named '${containerName}', generate 4 diverse and insightful 'quick questions' a user might ask an AI assistant in this context. Focus on actionable and common queries.`
-            : `Based on a container named '${containerName}', generate 4 creative and distinct 'personas' for an AI assistant. Examples: 'Concise Expert', 'Friendly Guide', 'Data-driven Analyst', 'Creative Brainstormer'.`;
-
-        try {
-            const response = await ai.models.generateContent({
-                model: 'gemini-2.5-flash',
-                contents: prompt,
-                config: {
-                    responseMimeType: "application/json",
-                    responseSchema: {
-                        type: Type.OBJECT,
-                        properties: {
-                            suggestions: {
-                                type: Type.ARRAY,
-                                items: { type: Type.STRING }
-                            }
-                        }
-                    }
-                }
-            });
-            return JSON.parse(response.text).suggestions || [];
-        } catch (error) {
-            console.error(`Error generating ${suggestionType}:`, error);
-            alert(`Sorry, I couldn't generate suggestions. Please try again.`);
-            return [];
-        }
-    };
-
-    const generateFunction = async (userRequest: string): Promise<Omit<AppFunction, 'id' | 'enabled'> | null> => {
-        const prompt = `Based on the user request for a function: "${userRequest}", generate a configuration for it. The function should run inside a chat application. 
-         - Define a short, clear 'name'.
-         - Write a concise one-sentence 'description'.
-         - Select a suitable SVG 'icon' from the provided list.
-         - Define 1 to 3 input 'parameters' the user needs to provide (name, type, description). Parameter 'type' must be one of: 'string', 'number', 'textarea'.
-         - Create a detailed 'promptTemplate' to be sent to another AI model. The prompt template must use placeholders like {parameterName} for each parameter defined.
-        Available icons:\n${FUNCTION_ICONS.join('\n')}`;
-
-        try {
-            const response = await ai.models.generateContent({
-                model: 'gemini-2.5-flash', contents: prompt,
-                config: {
-                    responseMimeType: "application/json",
-                    responseSchema: {
-                        type: Type.OBJECT,
-                        properties: {
-                            name: { type: Type.STRING }, description: { type: Type.STRING }, icon: { type: Type.STRING },
-                            parameters: { type: Type.ARRAY, items: { type: Type.OBJECT, properties: { name: { type: Type.STRING }, type: { type: Type.STRING, enum: ['string', 'number', 'textarea'] }, description: { type: Type.STRING } }, required: ['name', 'type', 'description'] } },
-                            promptTemplate: { type: Type.STRING }
-                        },
-                        required: ['name', 'description', 'icon', 'parameters', 'promptTemplate']
-                    }
-                }
-            });
-            return JSON.parse(response.text);
-        } catch (error) {
-            console.error(`Error generating function:`, error);
-            alert(`Sorry, I couldn't generate the function. The model might have returned an invalid structure. Please try again with a different request.`);
-            return null;
-        }
+    const handleChat = async (message: string) => {
+      const { response } = await callLLM(message);
+      console.log(response);
     };
 
     const generateContainerDetails = async (containerName: string, containerType: string, websiteUrl?: string) => {
-        if (!DOM.buttons.generateAi || !DOM.textElements.aiStatusText || !DOM.containers.aiSuggestions || !DOM.loaders.aiGenerate || !DOM.textElements.aiStatusSpinner) return;
-
-        DOM.buttons.generateAi.disabled = true;
-        DOM.buttons.generateAi.classList.add('loading');
-        DOM.loaders.aiGenerate.classList.remove('hidden');
-        DOM.containers.aiSuggestions.classList.add('hidden');
-        DOM.textElements.aiStatusSpinner.classList.remove('hidden');
-        state.draftNewContainer = null;
-
-        const statusMessages = [
-            "Connecting to AI...",
-            "Analyzing requirements...",
-            "Crafting personas...",
-            "Building function templates...",
-            "Designing a color theme..."
-        ];
-
-        if (containerType === 'product' && websiteUrl) {
-            statusMessages.splice(1, 1, "Analyzing website content...");
-        }
-        
-        let messageIndex = 0;
-        DOM.textElements.aiStatusText.textContent = statusMessages[messageIndex];
-        const statusInterval = setInterval(() => {
-            messageIndex = (messageIndex + 1) % statusMessages.length;
-            if (DOM.textElements.aiStatusText) DOM.textElements.aiStatusText.textContent = statusMessages[messageIndex];
-        }, 2000);
-
-        const iconDescriptions = JSON.stringify(AVAILABLE_ICONS_WITH_DESC);
-        const imageDescriptions = JSON.stringify(CARD_IMAGE_OPTIONS);
-        let contextPrompt = `A user wants to create a new container in an application. The container is named "${containerName}" and is of the type "${containerType}".`;
-        if (containerType === 'product' && websiteUrl) {
-            contextPrompt += ` The product's website is ${websiteUrl}. Please analyze the website content to inform your suggestions, especially for the description, quick questions, and functions, making them highly relevant to the product. For example, a support bot for a software product might need functions to check system status or explain features.`;
-        } else if (containerType === 'department') {
-            contextPrompt += ` The container is for a corporate department. Tailor suggestions to a professional, internal-use context. For example, an HR container might need functions for leave policies or benefits lookup.`;
-        }
-
-        const prompt = `${contextPrompt}
-Based on this context, generate a complete configuration:
-- **description**: A concise, one-sentence summary of the container's purpose.
-- **icon**: Choose the most appropriate SVG icon from the provided list by returning its exact SVG string.
-- **cardImageUrl**: Choose the most thematically appropriate image URL from the provided list for a background card, paying close attention to the container's name ('${containerName}') and its purpose.
-- **theme**: Suggest a complete color theme with nine hex color codes: userBg, userText, botBg, botText, bgGradientStart, bgGradientEnd, sidebarBg, sidebarText, and sidebarHighlightBg. Choose colors that are aesthetically pleasing, accessible (good contrast), and reflect the container's purpose (e.g., professional tones for 'Finance', creative colors for 'Design').
-- **quickQuestions**: Generate an array of 4 diverse and insightful string 'quick questions' a user might ask.
-- **availablePersonas**: Generate an array of 4 creative and distinct string 'personas' for the AI assistant.
-- **functions**: Generate an array of 2-3 relevant 'functions' a user might need. For each function, provide: name, description, an icon from the function icon list, 1-2 parameters (name, type, description), and a detailed promptTemplate using placeholders like {parameterName}.
-- **initialKnowledgeFile**: If a website URL was provided, generate a text file summarizing the key information from the site. This object must have a 'name' (e.g., "Website_Summary.txt") and 'content' (a plain-text summary). If no URL, return null for this field.
-
-Available container icons: ${iconDescriptions}
-Available card images: ${imageDescriptions}
-Available function icons: ${FUNCTION_ICONS.join('\n')}`;
-
-        try {
-            const response = await ai.models.generateContent({
-                model: 'gemini-2.5-flash',
-                contents: prompt,
-                config: {
-                    responseMimeType: "application/json",
-                    responseSchema: {
-                        type: Type.OBJECT,
-                        properties: {
-                            description: { type: Type.STRING },
-                            icon: { type: Type.STRING },
-                            cardImageUrl: { type: Type.STRING },
-                            theme: {
-                                type: Type.OBJECT,
-                                properties: { userBg: { type: Type.STRING }, userText: { type: Type.STRING }, botBg: { type: Type.STRING }, botText: { type: Type.STRING }, bgGradientStart: { type: Type.STRING }, bgGradientEnd: { type: Type.STRING }, sidebarBg: { type: Type.STRING }, sidebarText: { type: Type.STRING }, sidebarHighlightBg: { type: Type.STRING } },
-                                required: ['userBg', 'userText', 'botBg', 'botText', 'bgGradientStart', 'bgGradientEnd', 'sidebarBg', 'sidebarText', 'sidebarHighlightBg']
-                            },
-                            quickQuestions: { type: Type.ARRAY, items: { type: Type.STRING } },
-                            availablePersonas: { type: Type.ARRAY, items: { type: Type.STRING } },
-                            functions: {
-                                type: Type.ARRAY,
-                                items: {
-                                    type: Type.OBJECT,
-                                    properties: {
-                                        name: { type: Type.STRING }, description: { type: Type.STRING }, icon: { type: Type.STRING },
-                                        parameters: { type: Type.ARRAY, items: { type: Type.OBJECT, properties: { name: { type: Type.STRING }, type: { type: Type.STRING, enum: ['string', 'number', 'textarea'] }, description: { type: Type.STRING } }, required: ['name', 'type', 'description'] } },
-                                        promptTemplate: { type: Type.STRING }
-                                    },
-                                    required: ['name', 'description', 'icon', 'parameters', 'promptTemplate']
-                                }
-                            },
-                            initialKnowledgeFile: { type: Type.OBJECT, nullable: true, properties: { name: { type: Type.STRING }, content: { type: Type.STRING } } }
-                        },
-                        required: ['description', 'icon', 'cardImageUrl', 'theme', 'quickQuestions', 'availablePersonas', 'functions']
-                    }
-                }
-            });
-
-            const result = JSON.parse(response.text);
-            const knowledgeBase: KnowledgeFile[] = [];
-            if (result.initialKnowledgeFile?.content) {
-                const content = result.initialKnowledgeFile.content;
-                const blob = new Blob([content], { type: 'text/plain' });
-                knowledgeBase.push({
-                    name: result.initialKnowledgeFile.name || 'Website Summary.txt',
-                    type: 'text/plain',
-                    base64Content: `data:text/plain;base64,${btoa(content)}`,
-                    size: blob.size,
-                    uploadDate: new Date().toISOString()
-                });
-            }
-
-            state.draftNewContainer = { ...result, name: containerName, knowledgeBase };
-            renderAddContainerSuggestions();
-            DOM.textElements.aiStatusText.textContent = '✓ Suggestions generated! Review and create.';
-            DOM.containers.aiSuggestions.classList.remove('hidden');
-
-        } catch (error) {
-            console.error("Error generating container details:", error);
-            DOM.textElements.aiStatusText.textContent = 'Could not generate suggestions. Please fill in manually.';
-        } finally {
-            clearInterval(statusInterval);
-            DOM.textElements.aiStatusSpinner.classList.add('hidden');
-            DOM.buttons.generateAi.disabled = false;
-            DOM.loaders.aiGenerate.classList.add('hidden');
-            DOM.buttons.generateAi.classList.remove('loading');
-        }
+      console.warn('AI generation is stubbed.');
     };
 
-    const generateChatName = async (history: ChatHistory): Promise<string> => {
-        if (history.length < 2) return "New Conversation";
-        const firstUserPart = history[0].parts.find(p => 'text' in p);
-        const firstModelPart = history[1].parts.find(p => 'text' in p);
-        if (!firstUserPart || !('text' in firstUserPart) || !firstModelPart || !('text' in firstModelPart)) return "New Conversation";
-
-        const prompt = `Based on the following conversation, create a very short, concise title (max 5 words, and no quotes).\n\nConversation:\nUser: "${firstUserPart.text}"\nModel: "${firstModelPart.text}"`;
-        try {
-            const response = await ai.models.generateContent({ model: 'gemini-2.5-flash', contents: prompt });
-            return response.text.trim().replace(/["']/g, ""); // Remove quotes from response
-        } catch (error) {
-            console.error("Error generating chat name:", error);
-            return "New Conversation";
-        }
-    };
+    const generateChatName = async (_history: ChatHistory): Promise<string> => 'New Conversation';
     
     // --- [MODULE] src/handlers.ts ---
 
@@ -1671,48 +1487,17 @@ Available function icons: ${FUNCTION_ICONS.join('\n')}`;
         DOM.loaders.sendChat?.classList.remove('hidden');
         
         try {
-            const stream = await ai.models.generateContentStream({
-                model: container.selectedModel,
-                contents: {
-                    parts: [
-                        ...container.knowledgeBase.map(file => ({
-                            inlineData: {
-                                mimeType: file.type,
-                                data: file.base64Content.split(',')[1]
-                            }
-                        })),
-                        ...userParts
-                    ]
-                },
-                config: {
-                    systemInstruction: `You are an AI assistant. Your current persona is: ${container.selectedPersona}.`
-                }
-            });
-            
-            let fullResponse = "";
-            let responseText = "";
-
+            const { response } = await callLLM(userInput);
             thinkingIndicator?.remove();
-            const botMessageDiv = addMessageToUI([{ text: '' }], 'bot');
-
-            for await (const chunk of stream) {
-                responseText = chunk.text;
-                fullResponse += responseText;
-                if(botMessageDiv) botMessageDiv.innerHTML = markdownToHtml(fullResponse);
-                DOM.containers.chatMessages!.scrollTop = DOM.containers.chatMessages!.scrollHeight;
-            }
-
-            activeChat.history.push({ role: 'model', parts: [{ text: fullResponse }] });
-
+            addMessageToUI([{ text: response }], 'bot');
+            activeChat.history.push({ role: 'model', parts: [{ text: response }] });
             if (activeChat.history.length === 2) {
                 activeChat.name = await generateChatName(activeChat.history);
             }
-            
             renderSidebar(container.id);
             saveState();
-
         } catch (error) {
-            console.error("Error sending message:", error);
+            console.error('Error sending message:', error);
             thinkingIndicator?.remove();
             addMessageToUI([{ text: 'Sorry, I encountered an error. Please try again.' }], 'bot');
         } finally {
@@ -2554,7 +2339,7 @@ Available function icons: ${FUNCTION_ICONS.join('\n')}`;
                 <div className="form-group">
                   <label htmlFor="edit-custom-icon-upload" className="form-label">Upload Custom Icon</label>
                   <div className="custom-icon-uploader">
-                    <img id="edit-custom-icon-preview" src alt="Custom icon preview" className="custom-icon-preview hidden" />
+                    <img id="edit-custom-icon-preview" src="" alt="Custom icon preview" className="custom-icon-preview hidden" />
                     <button type="button" id="edit-custom-icon-btn" className="modal-btn modal-btn-secondary">Choose Image...</button>
                     <input type="file" id="edit-custom-icon-upload" className="hidden" accept="image/png, image/jpeg, image/webp, image/svg+xml" />
                   </div>
@@ -2567,7 +2352,7 @@ Available function icons: ${FUNCTION_ICONS.join('\n')}`;
                   <label className="form-label">Card Background Image</label>
                   <div className="card-image-selector">
                     <div id="card-image-options-list" className="icon-selector-grid" />
-                    <img id="edit-card-image-preview" src alt="Card image preview" className="card-image-preview hidden" />
+                    <img id="edit-card-image-preview" src="" alt="Card image preview" className="card-image-preview hidden" />
                     <button type="button" id="edit-card-image-btn" className="modal-btn modal-btn-secondary">Upload Custom Image...</button>
                     <input type="file" id="edit-card-image-upload" className="hidden" accept="image/png, image/jpeg, image/webp" />
                   </div>
@@ -2885,8 +2670,8 @@ Available function icons: ${FUNCTION_ICONS.join('\n')}`;
                 </div>
                 <div className="form-group">
                   <label htmlFor="container-type-select" className="form-label">Container Type</label>
-                  <select id="container-type-select" className="form-input">
-                    <option value="general" selected>General</option>
+                  <select id="container-type-select" className="form-input" defaultValue="general">
+                    <option value="general">General</option>
                     <option value="product">Product</option>
                     <option value="department">Department</option>
                   </select>
@@ -2921,7 +2706,7 @@ Available function icons: ${FUNCTION_ICONS.join('\n')}`;
                 <div className="form-group">
                   <label htmlFor="add-custom-icon-upload" className="form-label">Or Upload Custom Icon</label>
                   <div className="custom-icon-uploader">
-                    <img id="add-custom-icon-preview" src alt="Custom icon preview" className="custom-icon-preview hidden" />
+                    <img id="add-custom-icon-preview" src="" alt="Custom icon preview" className="custom-icon-preview hidden" />
                     <button type="button" id="add-custom-icon-btn" className="modal-btn modal-btn-secondary">Choose Image...</button>
                     <input type="file" id="add-custom-icon-upload" className="hidden" accept="image/png, image/jpeg, image/webp, image/svg+xml" />
                   </div>

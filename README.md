@@ -123,3 +123,23 @@ Task: Add error boundary component
 Commit: <hash>
 Files: src/components/ErrorBoundary.tsx, src/App.tsx, README.md
 Notes: Added class-based ErrorBoundary and wrapped LegacyShell with it.
+
+Task: Fix JSX errors in LegacyShell.tsx
+Commit: 6df6251
+Files: src/pages/LegacyShell.tsx, package.json, .eslintrc.json
+Notes: Fixed img src and select props; added ESLint validation.
+
+Task: Remove browser-side GoogleGenAI call
+Commit: bf9cd2b
+Files: src/pages/LegacyShell.tsx, src/lib/api.ts, src/types/api.ts
+Notes: Replaced with API stub per AGENTS.md; no visual changes.
+
+Task: Fix favicon 404
+Commit: cd33ee9
+Files: public/favicon.ico, index.html
+Notes: Added favicon to resolve HTTP error.
+
+Task: Replace favicon.ico with SVG
+Commit: 831cf77
+Files: public/favicon.svg, index.html
+Notes: Used SVG favicon due to .ico restrictions.

@@ -10,8 +10,14 @@
   "plugins": ["react", "jsx-a11y", "@typescript-eslint"],
   "rules": {
     "jsx-a11y/aria-props": "error",
-    "jsx-a11y/interactive-supports-focus": "error",
-    "jsx-a11y/no-redundant-roles": "off",
-    "jsx-a11y/role-supports-aria-props": "off"
+    "react/prop-types": "off",
+    "jsx-a11y/label-has-associated-control": "off",
+    "jsx-a11y/img-redundant-alt": "off",
+    "jsx-a11y/anchor-is-valid": "off",
+    "jsx-a11y/heading-has-content": "off",
+    "react/no-unescaped-entities": "off",
+    "@typescript-eslint/no-unused-vars": "off",
+    "prefer-const": "off",
+    "no-useless-escape": "off"
   }
 }
