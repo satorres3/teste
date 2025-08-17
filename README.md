@@ -151,3 +151,8 @@ Task: Add routing and stub pages
 Commit: 82ada7e, 8537d28
 Files: package.json, src/App.tsx, src/components/Sidebar.tsx, src/pages/Login.tsx, src/pages/Hub.tsx, src/pages/SettingsHub.tsx, src/pages/GlobalSettings.tsx, src/pages/Workspace.tsx, src/pages/Knowledge.tsx, src/pages/LegacyShell.tsx
 Notes: Introduced react-router-dom routing and migrated legacy sections into dedicated pages with debugging logs.
+
+Task: Add stubbed SSO login handlers
+Commit: f60e4fb, c57df81
+Files: src/pages/Login.tsx, src/types/api.ts, src/lib/msal.ts, README.md
+Notes: Hooked sign-in buttons to mock auth functions and navigation to maintain behavior.
