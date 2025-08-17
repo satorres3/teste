@@ -1,4 +1,6 @@
-import { FC } from 'react';
+
+import React, { FC } from 'react';
+
 import { Navigate } from 'react-router-dom';
 import Sidebar from '../components/Sidebar';
 
@@ -18,3 +20,4 @@ const LegacyShell: FC = () => {
 };
 
 export default LegacyShell;
+
