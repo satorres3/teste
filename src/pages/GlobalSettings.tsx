@@ -1,8 +1,9 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 export default function GlobalSettings() {
   const navigate = useNavigate();
+  const [activeTab, setActiveTab] = useState('branding');
   useEffect(() => {
     console.log('Route loaded: /settings/global');
   }, []);
@@ -33,15 +34,45 @@ export default function GlobalSettings() {
       <div className="settings-container">
         <h1 className="settings-title">Global Settings</h1>
         <nav id="global-settings-tabs" className="settings-tabs">
-          <button className="tab-link active" data-tab="branding">Branding &amp; Appearance</button>
-          <button className="tab-link" data-tab="models">Model Management</button>
-          <button className="tab-link" data-tab="auth">Authentication</button>
-          <button className="tab-link" data-tab="privacy">Privacy &amp; Cookies</button>
-          <button className="tab-link" data-tab="integrations">Integrations</button>
+          <button
+            className={`tab-link ${activeTab === 'branding' ? 'active' : ''}`}
+            data-tab="branding"
+            onClick={() => setActiveTab('branding')}
+          >
+            Branding &amp; Appearance
+          </button>
+          <button
+            className={`tab-link ${activeTab === 'models' ? 'active' : ''}`}
+            data-tab="models"
+            onClick={() => setActiveTab('models')}
+          >
+            Model Management
+          </button>
+          <button
+            className={`tab-link ${activeTab === 'auth' ? 'active' : ''}`}
+            data-tab="auth"
+            onClick={() => setActiveTab('auth')}
+          >
+            Authentication
+          </button>
+          <button
+            className={`tab-link ${activeTab === 'privacy' ? 'active' : ''}`}
+            data-tab="privacy"
+            onClick={() => setActiveTab('privacy')}
+          >
+            Privacy &amp; Cookies
+          </button>
+          <button
+            className={`tab-link ${activeTab === 'integrations' ? 'active' : ''}`}
+            data-tab="integrations"
+            onClick={() => setActiveTab('integrations')}
+          >
+            Integrations
+          </button>
         </nav>
         <form id="global-settings-form">
           <div id="global-settings-panels" className="settings-panels">
-            <div id="tab-panel-branding" className="tab-panel active">
+            <div id="tab-panel-branding" className={`tab-panel ${activeTab === 'branding' ? 'active' : ''}`}>
               <div className="settings-section">
                 <div className="appearance-layout">
                   <div className="appearance-controls">
@@ -93,7 +124,7 @@ export default function GlobalSettings() {
                 </div>
               </div>
             </div>
-            <div id="tab-panel-models" className="tab-panel">
+            <div id="tab-panel-models" className={`tab-panel ${activeTab === 'models' ? 'active' : ''}`}>
               <div className="settings-section">
                 <h2 className="settings-section-title">AI Model Management</h2>
                 <p className="settings-section-description">Add, edit, or remove the AI models available across the application. The model ID should match the API identifier (e.g., 'gemini-2.5-flash').</p>
@@ -106,7 +137,7 @@ export default function GlobalSettings() {
                 <button type="submit" className="modal-btn modal-btn-primary">Add Model</button>
               </div>
             </div>
-            <div id="tab-panel-auth" className="tab-panel">
+            <div id="tab-panel-auth" className={`tab-panel ${activeTab === 'auth' ? 'active' : ''}`}>
               <div className="settings-section">
                 <h2 className="settings-section-title">Authentication (OAuth)</h2>
                 <p className="settings-section-description">Enable or disable third-party login providers and configure their credentials.</p>
@@ -142,7 +173,7 @@ export default function GlobalSettings() {
                 </div>
               </div>
             </div>
-            <div id="tab-panel-privacy" className="tab-panel">
+            <div id="tab-panel-privacy" className={`tab-panel ${activeTab === 'privacy' ? 'active' : ''}`}>
               <div className="settings-section">
                 <h2 className="settings-section-title">Privacy &amp; Cookies</h2>
                 <p className="settings-section-description">Manage privacy settings for your users.</p>
@@ -156,7 +187,7 @@ export default function GlobalSettings() {
                 </div>
               </div>
             </div>
-            <div id="tab-panel-integrations" className="tab-panel">
+            <div id="tab-panel-integrations" className={`tab-panel ${activeTab === 'integrations' ? 'active' : ''}`}>
               <div className="settings-section">
                 <h2 className="settings-section-title">Integrations</h2>
                 <p className="settings-section-description">Globally enable or disable integrations. They can be activated per-container in the container's settings.</p>
@@ -165,10 +196,25 @@ export default function GlobalSettings() {
                 </div>
               </div>
             </div>
-          </div></form>
+          </div>
+        </form>
         <footer className="settings-footer">
-          <button type="button" id="cancel-global-settings-btn" className="modal-btn modal-btn-secondary">Cancel</button>
-          <button type="button" id="save-global-settings-btn" className="modal-btn modal-btn-primary" disabled>Save Changes</button>
+          <button
+            type="button"
+            id="cancel-global-settings-btn"
+            className="modal-btn modal-btn-secondary"
+            onClick={() => navigate('/settings')}
+          >
+            Cancel
+          </button>
+          <button
+            type="button"
+            id="save-global-settings-btn"
+            className="modal-btn modal-btn-primary"
+            onClick={() => console.log('Save Global Settings')}
+          >
+            Save Changes
+          </button>
         </footer>
       </div>
     </div>

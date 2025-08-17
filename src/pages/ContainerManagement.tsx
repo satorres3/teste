@@ -31,6 +31,13 @@ export default function ContainerManagement() {
       </header>
       <div className="settings-container">
         <h1 className="settings-title">Container Management</h1>
+        <button
+          id="add-container-btn"
+          className="modal-btn modal-btn-primary"
+          onClick={() => console.log('Add Container')}
+        >
+          Add Container
+        </button>
         <div id="container-management-grid" className="container-management-grid" />
       </div>
     </div>
