@@ -156,3 +156,7 @@ Task: Add stubbed SSO login handlers
 Commit: f60e4fb, c57df81
 Files: src/pages/Login.tsx, src/types/api.ts, src/lib/msal.ts, README.md
 Notes: Hooked sign-in buttons to mock auth functions and navigation to maintain behavior.
+Task: Fix portal navigation buttons
+Commit: cde6ac4, d8ec486
+Files: src/App.tsx, src/pages/Hub.tsx, src/pages/SettingsHub.tsx, src/pages/GlobalSettings.tsx, src/pages/Workspace.tsx, src/pages/Knowledge.tsx, src/pages/ContainerManagement.tsx
+Notes: Wired settings, back, and logout buttons to React Router routes and added container management stub.
