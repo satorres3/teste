@@ -115,3 +115,7 @@ Task: Add Playwright visual regression tests
 Commit: 2d6a0d9
 Files: package.json, package-lock.json, playwright.config.ts, tests/visual.test.ts
 Notes: Installed Playwright and added snapshot test with console and keyboard checks.
+Task: Configure ESLint
+Commit: <hash>
+Files: .eslintrc.json, package.json, package-lock.json, README.md
+Notes: Added ESLint with React, a11y, and TypeScript rules and lint script.

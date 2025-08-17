@@ -1,0 +1,17 @@
+{
+  "env": { "browser": true, "es2021": true },
+  "extends": [
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "plugin:jsx-a11y/recommended",
+    "plugin:@typescript-eslint/recommended"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "plugins": ["react", "jsx-a11y", "@typescript-eslint"],
+  "rules": {
+    "jsx-a11y/aria-props": "error",
+    "jsx-a11y/interactive-supports-focus": "error",
+    "jsx-a11y/no-redundant-roles": "off",
+    "jsx-a11y/role-supports-aria-props": "off"
+  }
+}
