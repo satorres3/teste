@@ -98,3 +98,7 @@ Task: Update documentation files
 Commit: <hash></hash>
 Files: AGENTS.md, README.md, ARCHITECTURE.md
 Notes: Aligned with latest plan (CSS preservation, Cosmos DB, Python embeddings).
+Task: Scaffold React app and migrate legacy shell
+Commit: 1fd72ad
+Files: index.html, package.json, vite.config.ts, src/App.tsx, src/main.tsx, src/pages/LegacyShell.tsx
+Notes: Added React dependencies and migrated existing UI/logic into React components.
