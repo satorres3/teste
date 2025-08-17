@@ -111,3 +111,7 @@ Task: Extract sidebar component
 Commit: 6626bc9
 Files: src/components/Sidebar.tsx, src/pages/LegacyShell.tsx, README.md
 Notes: Moved sidebar markup into Sidebar component and updated LegacyShell.
+Task: Add Playwright visual regression tests
+Commit: 2d6a0d9
+Files: package.json, package-lock.json, playwright.config.ts, tests/visual.test.ts
+Notes: Installed Playwright and added snapshot test with console and keyboard checks.
