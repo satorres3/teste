@@ -160,3 +160,7 @@ Task: Fix portal navigation buttons
 Commit: cde6ac4, d8ec486
 Files: src/App.tsx, src/pages/Hub.tsx, src/pages/SettingsHub.tsx, src/pages/GlobalSettings.tsx, src/pages/Workspace.tsx, src/pages/Knowledge.tsx, src/pages/ContainerManagement.tsx
 Notes: Wired settings, back, and logout buttons to React Router routes and added container management stub.
+Task: Restore add container modal
+Commit: 6298a32
+Files: src/components/AddContainerModal.tsx, src/pages/ContainerManagement.tsx, src/pages/Workspace.tsx
+Notes: Added "Add New" button with stubbed modal to mirror legacy container creation flow.

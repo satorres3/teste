@@ -1,8 +1,10 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import AddContainerModal from '../components/AddContainerModal';
 
 export default function ContainerManagement() {
   const navigate = useNavigate();
+  const [showAddModal, setShowAddModal] = useState(false);
   useEffect(() => {
     console.log('Route loaded: /settings/containers');
   }, []);
@@ -30,9 +32,19 @@ export default function ContainerManagement() {
         </div>
       </header>
       <div className="settings-container">
-        <h1 className="settings-title">Container Management</h1>
+        <div className="settings-section-header">
+          <h1 className="settings-title">Container Management</h1>
+          <button
+            id="add-container-btn"
+            className="modal-btn modal-btn-primary"
+            onClick={() => setShowAddModal(true)}
+          >
+            Add New
+          </button>
+        </div>
         <div id="container-management-grid" className="container-management-grid" />
       </div>
+      <AddContainerModal open={showAddModal} onClose={() => setShowAddModal(false)} />
     </div>
   );
 }
