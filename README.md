@@ -161,16 +161,14 @@ Files: src/pages/LegacyShell.tsx, src/pages/SettingsHub.tsx, src/pages/GlobalSet
 Notes: Added redirects and stub routes for settings and workspace; sidebar reused.
 
 Task: Fix unintended redirect in LegacyShell.tsx
-Commit: <hash>
 Files: src/pages/LegacyShell.tsx
 Notes: Removed Navigate to /hub; restored root route content; no visual changes.
 
 Task: Restore button functionality in Sidebar.tsx
-Commit: <hash>
 Files: src/components/Sidebar.tsx
 Notes: Replaced anchor elements with Link for navigation; no visual changes.
 
 Task: Add dynamic route highlighting in Sidebar.tsx
-Commit: <hash>
 Files: src/components/Sidebar.tsx, src/styles/sidebar.css
 Notes: Used useLocation to apply active class and documented existing styles; no visual changes.
+
