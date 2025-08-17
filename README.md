@@ -143,3 +143,7 @@ Task: Replace favicon.ico with SVG
 Commit: 831cf77
 Files: public/favicon.svg, index.html
 Notes: Used SVG favicon due to .ico restrictions.
+Task: Fix empty src attributes in LegacyShell.tsx
+Commit: 6904f2b
+Files: src/pages/LegacyShell.tsx, .eslintrc.json, README.md
+Notes: Replaced empty image src values with null and tightened ESLint rules.
