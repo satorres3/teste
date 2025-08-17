@@ -1,51 +1,62 @@
 
-**Notes:**
-- The diagram and text reflect the revised flowchart and align with the backend plan (FastAPI, Cosmos DB, Azure AI Search).
-- Components are detailed to clarify roles (e.g., frontend vs. backend responsibilities).
-- Future considerations include enhancements from the previous plan (e.g., caching, multi-modal).
+#### AGENTS.md
+This version refines the original with stronger guardrails (e.g., CSS specificity, Playwright tests) and incorporates your phases (Safe Scaffold, Routing, Stubs). It’s tailored to your repo’s files and ensures Codex preserves `index.css` and avoids browser-side LLM calls.
 
-### Integration with Previous Plans
+```markdown
+# AGENTS — Working Agreement for Automated Changes
 
-1. **Frontend**:
-   - The `AGENTS.md` phases align with the previous refactor prompt. Phase 1 (Safe Scaffold) matches splitting `index.tsx` into components (`LegacyShell.tsx`, `Sidebar.tsx`). Phase 2 (Routing) implements the routes from the prompt. Phase 3 (Stubs) adds `msal.ts` and `api.ts` as stubs, matching the API integration plan.
-   - CSS preservation is reinforced by `AGENTS.md`’s non-negotiables and the prompt’s instruction to split `index.css` without changing rules.
-   - Suggestion: In Phase 1, use the previous prompt to generate initial component splits (e.g., `Sidebar.tsx`, `Chat.tsx`), then apply `AGENTS.md`’s routing in Phase 2.
+You (automation) are acting as **Principal Engineer**. Follow this agreement exactly.
 
-2. **Backend**:
-   - The architecture’s FastAPI backend, Cosmos DB, and Azure AI Search match the previous `main.py` and `agents.py`.
-   - The model router (LangChain) and RAG align with the backend’s `get_rag_chain` and agent logic.
-   - SSE is new; update `main.py` to add an SSE endpoint (e.g., `/api/chat/{id}/stream`).
+## Non-Negotiables
 
-3. **Codex Agents**:
-   - Assuming “codex” refers to Claude-based LangChain agents (or custom tools), the `agents.py` from the previous response supports this (e.g., `create_sales_agent`).
-   - The `/api/functions/{id}` endpoint in `main.py` runs these agents, matching the architecture’s model router.
-   - Suggestion: Expand `agents.py` with more tools (e.g., SharePoint fetch via Graph) as needed.
+1. **UI/UX and styles must remain identical** until explicitly allowed to change.
+2. **Do not rename** CSS classes, IDs, or variables (no Tailwind migration, no utility rewrite).
+3. **No direct LLM calls in the browser**. All AI logic (e.g., LangChain, model calls) must be server-side via FastAPI.
+4. **Small commits** per task; one logical change per commit.
+5. **Update README.md → Task Log** after each task (Task, commit, files, notes).
+6. **Never delete** `index.html`, `index.css`, or `index.tsx` content without a *1:1 JSX* migration.
+7. **No changes to CSS specificity or rule order** to avoid cascade issues.
+8. **Run TypeScript checks** (`npx tsc --noEmit`) after each task to ensure no type errors.
 
-4. **Azure Deployment**:
-   - The architecture’s deployment (Static Web Apps, App Service) matches the previous README.
-   - Add SSE support to App Service (FastAPI supports SSE natively).
+## Branching & Commits
 
-**Updated Backend Code (Add SSE):**
-Add this to `main.py` for real-time chat:
+- Create a feature branch per milestone (e.g., `chore/safe-refactor`, `feat/router`).
+- Conventional commits: `chore:`, `feat:`, `fix:`, `docs:`.
 
-```python
-from fastapi.responses import StreamingResponse
-import asyncio
+## Phase 1 — Safe Scaffold (no visual changes)
 
-@app.get("/api/chat/{container_id}/stream")
-async def chat_stream(container_id: str, query: str, user = Depends(get_current_user)):
-    container = containers_container.read_item(container_id)
-    if user["email"] not in container["accessControl"]:
-        raise HTTPException(status_code=403, detail="Access denied")
-    vectorstore = FAISS.load_local(f"vectorstores/{container_id}")
-    chain = get_rag_chain(container["selectedModel"], vectorstore)
+1. Create `src/` with `App.tsx`, `main.tsx`, and `pages/LegacyShell.tsx`.
+2. Render **existing** markup from `index.html`/`index.tsx` inside `LegacyShell.tsx` as JSX.
+3. Convert only HTML→JSX syntax; **do not** change classes, IDs, or attributes.
+4. Keep `index.css` as is, import globally in `main.tsx`. Split into `src/styles/` (e.g., `global.css`, `sidebar.css`, `chat.css`) with identical rules, ensuring no visual changes.
+5. Ensure fonts, meta tags, and links (e.g., Google Fonts) from `index.html` are intact in `index.html` or `App.tsx`.
+6. Extract shared UI (e.g., sidebar) into `components/Sidebar.tsx` for reuse.
 
-    async def stream_response():
-        # Simulate streaming (replace with LangChain streaming if supported)
-        response = chain.run({"question": query, "persona": container["selectedPersona"]})
-        for chunk in response.split():
-            yield f"data: {chunk}\n\n"
-            await asyncio.sleep(0.1)  # Simulate streaming
-        yield "data: [DONE]\n\n"
+## Phase 2 — Routing (still no visual changes)
 
-    return StreamingResponse(stream_response(), media_type="text/event-stream")
+- Install React Router (`react-router-dom`) and create routes:
+  - `/login`, `/hub`, `/settings`, `/settings/global`, `/workspace/:id`, `/workspace/:id/knowledge`
+- Move sections from `LegacyShell.tsx` into dedicated pages (`pages/Login.tsx`, `pages/Hub.tsx`, etc.) **verbatim** as JSX.
+- Reuse `Sidebar.tsx` across routes for consistent navigation.
+- Remove each section from `LegacyShell.tsx` once verified for pixel-parity (use Playwright for visual regression tests).
+- Ensure dynamic routes (e.g., `/workspace/:id`) handle container-specific data correctly.
+
+## Phase 3 — Stubs (no API integration yet)
+
+- Add `src/lib/msal.ts` (stub for Azure AD login) and `src/lib/api.ts` (stub for backend calls).
+- Define TypeScript interfaces in `src/types/api.ts` for API responses (e.g., `Container`, `ChatMessage`) to match backend Pydantic models.
+- No behavior changes; only code structure for future logic (e.g., login flow, container fetching).
+- Stubbed API calls return mock data (e.g., hard-coded containers).
+
+## Documentation Requirements
+
+- Update `README.md` Task Log after every task (Task, commit hash, files changed, notes).
+- Maintain `ARCHITECTURE.md` with system diagrams and component descriptions.
+- This file (`AGENTS.md`) is the source of truth for guardrails.
+
+## Acceptance per Task
+
+- App builds (`npm run build`) and runs (`npm start`).
+- UI visually identical to main branch (verified via Playwright screenshot tests).
+- `npx tsc --noEmit` passes (no TypeScript errors).
+- README Task Log updated with task details.
