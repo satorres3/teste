@@ -147,3 +147,15 @@ Task: Fix empty src attributes in LegacyShell.tsx
 Commit: 6904f2b
 Files: src/pages/LegacyShell.tsx, .eslintrc.json, README.md
 Notes: Replaced empty image src values with null and tightened ESLint rules.
+Task: Add React Router with basic routes
+Commit: bfe54ee
+Files: package.json, src/App.tsx, src/pages/Login.tsx, src/pages/Hub.tsx, src/pages/SettingsHub.tsx, src/pages/GlobalSettings.tsx, src/pages/Workspace.tsx, src/pages/Knowledge.tsx
+Notes: Added react-router-dom and stub components; no visual changes.
+Task: Migrate login and hub to dedicated routes
+Commit: 0c697c1
+Files: src/pages/LegacyShell.tsx, src/pages/Login.tsx, src/pages/Hub.tsx, src/styles/login.css, src/styles/hub.css, src/styles/global.css, src/main.tsx
+Notes: Moved login and hub markup to routes; reused Sidebar; no visual changes.
+Task: Add settings and workspace routes
+Commit: 1ef9d85
+Files: src/pages/LegacyShell.tsx, src/pages/SettingsHub.tsx, src/pages/GlobalSettings.tsx, src/pages/Workspace.tsx, src/pages/Knowledge.tsx, src/styles/workspace.css, src/main.tsx
+Notes: Added redirects and stub routes for settings and workspace; sidebar reused.
