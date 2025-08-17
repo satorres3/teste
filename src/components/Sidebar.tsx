@@ -10,11 +10,20 @@ export default function Sidebar() {
         <h2 id="sidebar-container-title">Container</h2>
       </div>
       <nav className="sidebar-nav">
-        <button id="new-chat-btn" className="sidebar-link new-chat-btn">
+        <button id="new-chat-btn" className="sidebar-link new-chat-btn" onClick={() => { /* TODO: start new chat */ }}>
           <svg xmlns="http://www.w3.org/2000/svg" width={20} height={20} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"><line x1={12} y1={5} x2={12} y2={19} /><line x1={5} y1={12} x2={19} y2={12} /></svg>
           <span>New Chat</span>
         </button>
         <ul id="sidebar-main-nav">
+          <li>
+            <Link
+              id="sidebar-login-link"
+              to="/login"
+              className={`sidebar-link${location.pathname === '/login' ? ' active' : ''}`}
+            >
+              <span>Login</span>
+            </Link>
+          </li>
           <li>
             <Link
               id="sidebar-assistant-link"
@@ -39,9 +48,27 @@ export default function Sidebar() {
           </li>
           <li>
             <Link
+              id="sidebar-settings-link"
+              to="/settings"
+              className={`sidebar-link${location.pathname === '/settings' ? ' active' : ''}`}
+            >
+              <span>Settings</span>
+            </Link>
+          </li>
+          <li>
+            <Link
+              id="sidebar-workspace-link"
+              to="/workspace/1"
+              className={`sidebar-link${location.pathname.startsWith('/workspace/1') && !location.pathname.includes('/knowledge') ? ' active' : ''}`}
+            >
+              <span>Workspace (Example)</span>
+            </Link>
+          </li>
+          <li>
+            <Link
               id="sidebar-knowledge-link"
               to="/workspace/1/knowledge"
-              className={`sidebar-link${location.pathname.includes('/knowledge') ? ' active' : ''}`}
+              className={`sidebar-link${location.pathname.startsWith('/workspace/1') && location.pathname.includes('/knowledge') ? ' active' : ''}`}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -57,7 +84,7 @@ export default function Sidebar() {
                 <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
                 <path d="M6.5 2H20v15H6.5A2.5 2.5 0 0 1 4 14.5v-10A2.5 2.5 0 0 1 6.5 2z" />
               </svg>
-              <span>Knowledge</span>
+              <span>Knowledge (Example)</span>
             </Link>
           </li>
         </ul>
