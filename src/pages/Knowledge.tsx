@@ -1,6 +1,9 @@
 import React, { useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 
 export default function Knowledge() {
+  const navigate = useNavigate();
+  const { id } = useParams();
   useEffect(() => {
     console.log('Route loaded: /workspace/:id/knowledge');
   }, []);
@@ -8,7 +11,12 @@ export default function Knowledge() {
     <div id="knowledge-page" className="page-view">
       <header className="app-header">
         <div className="header-left">
-          <button id="back-to-assistant-btn" className="header-icon-btn" aria-label="Back to Assistant" onClick={() => console.log('Button clicked: Back to Assistant')}>
+          <button
+            id="back-to-assistant-btn"
+            className="header-icon-btn"
+            aria-label="Back to Assistant"
+            onClick={() => navigate(`/workspace/${id}`)}
+          >
             <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"><line x1={19} y1={12} x2={5} y2={12} /><polyline points="12 19 5 12 12 5" /></svg>
           </button>
           <span id="knowledge-page-title" className="header-title">Knowledge Base</span>

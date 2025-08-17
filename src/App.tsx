@@ -7,6 +7,7 @@ import SettingsHub from './pages/SettingsHub';
 import GlobalSettings from './pages/GlobalSettings';
 import Workspace from './pages/Workspace';
 import Knowledge from './pages/Knowledge';
+import ContainerManagement from './pages/ContainerManagement';
 
 export default function App() {
   return (
@@ -17,6 +18,7 @@ export default function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/hub" element={<Hub />} />
           <Route path="/settings" element={<SettingsHub />} />
+          <Route path="/settings/containers" element={<ContainerManagement />} />
           <Route path="/settings/global" element={<GlobalSettings />} />
           <Route path="/workspace/:id" element={<Workspace />} />
           <Route path="/workspace/:id/knowledge" element={<Knowledge />} />
