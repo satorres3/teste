@@ -106,3 +106,8 @@ Task: Split index.css into modular styles
 Commit: <hash>
 Files: index.css, src/main.tsx, src/styles/global.css, src/styles/sidebar.css, src/styles/chat.css, src/styles/hub.css, src/styles/settings.css, src/styles/modal.css
 Notes: Extracted page-specific rules to dedicated CSS files and updated imports.
+
+Task: Extract sidebar component
+Commit: 6626bc9
+Files: src/components/Sidebar.tsx, src/pages/LegacyShell.tsx, README.md
+Notes: Moved sidebar markup into Sidebar component and updated LegacyShell.
