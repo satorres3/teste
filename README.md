@@ -47,8 +47,3 @@ If any change risks visual drift, stop and open an issue instead.
 # Node 20+
 npm install
 npm run dev
-```
-
-## Task Log
-
-- Scaffold Legacy React shell — `7bb1c55` — `index.html`, `src/`, `package.json`, `package-lock.json`, `tsconfig.json` — Migrated legacy markup into React shell and set up new entry.
