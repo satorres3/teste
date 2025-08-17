@@ -176,3 +176,8 @@
         display: none; /* Hide title on small screens to save space */
     }
 }
+
+.sidebar .active {
+  background-color: #f0f0f0;
+  font-weight: bold;
+}

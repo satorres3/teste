@@ -2,13 +2,11 @@
 #settings-hub-page.page-view,
 #container-management-page.page-view,
 #global-settings-page.page-view,
-#settings-detail-page.page-view,
-#knowledge-page.page-view {
+#settings-detail-page.page-view {
     padding-top: var(--header-height);
     justify-content: flex-start;
 }
-.settings-container,
-.knowledge-container {
+.settings-container {
     width: 100%;
     max-width: 900px;
     background: transparent;
@@ -32,8 +30,7 @@
     padding: 0;
 }
 
-.settings-title,
-#knowledge-title {
+.settings-title {
     font-family: var(--font-primary);
     font-size: 2.25rem;
     text-align: center;
