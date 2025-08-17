@@ -68,7 +68,7 @@
     font-family: inherit;
     font-size: inherit;
 }
-/* Active link highlight */
+/* Active link highlight (route aware) */
 .sidebar-link:hover, .sidebar-link.active {
     background-color: var(--sidebar-highlight-bg);
     color: var(--text-primary);
